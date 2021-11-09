@@ -1,66 +1,55 @@
 import 'package:flutter/material.dart';  
   
-void main() => runApp(MyApp());  
+void main() {  
+  runApp(MaterialApp( home: MyHomePage(),));  
+}  
   
-// This Widget is the main application widget.  
-class MyApp extends StatelessWidget {  
+class MyHomePage extends StatefulWidget {  
+  @override  
+  _HomePageState createState() => _HomePageState();  
+}  
+  
+class _HomePageState extends State<MyHomePage> {  
+  bool valuefirst = false;  
+  bool valuesecond = false;  
+  
   @override  
   Widget build(BuildContext context) {  
     return MaterialApp(  
-      home: MySliderApp(),  
+      home: Scaffold(  
+        appBar: AppBar(title: Text('Flutter Checkbox Example'),),  
+        body: Container(  
+  
+            child: Column(  
+              children: <Widget>[  
+                Row(  
+                  children: <Widget>[  
+                    SizedBox(width: 10,),  
+                    Text('Checkbox without Header and Subtitle: ',style: TextStyle(fontSize: 17.0), ),  
+                    Checkbox(  
+                      checkColor: Colors.greenAccent,  
+                      activeColor: Colors.red,  
+                      value: this.valuefirst,  
+                      onChanged: (bool? value) {  
+                        setState(() {  
+                          this.valuefirst = value!;  
+                        });  
+                      },  
+                    ),  
+                    Checkbox(  
+                      value: this.valuesecond,  
+                      onChanged: (bool? value) {  
+                        setState(() {  
+                          this.valuesecond = value!;  
+                        });  
+                      },  
+                    ),  
+                  ],  
+                ),  
+              ],  
+            )  
+        ),  
+      ),  
     );  
   }  
-}  
-  
-class MySliderApp extends StatefulWidget {  
-  MySliderApp({Key? key}) : super(key: key);  
-  
-  @override  
-  _MySliderAppState createState() => _MySliderAppState();  
-}  
-  
-class _MySliderAppState extends State<MySliderApp> {  
-  int _value = 6;  
-  @override  
-  Widget build(BuildContext context) {  
-    return Scaffold(  
-      appBar: AppBar(  
-        title: Text('Flutter Slider Demo'),  
-        ),  
-        body: Padding(  
-          padding: EdgeInsets.all(15.0),  
-            child: Center(  
-                child: Row(  
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,  
-                    mainAxisSize: MainAxisSize.max,  
-                    children: [  
-                      Icon(  
-                        Icons.volume_up,  
-                        size: 40,  
-                      ),  
-                      new Expanded(  
-                          child: Slider(  
-                            value: _value.toDouble(),  
-                            min: 1.0,  
-                            max: 20.0,  
-                            divisions: 10,  
-                            activeColor: Colors.green,  
-                            inactiveColor: Colors.orange,  
-                            label: 'Set volume value',  
-                            onChanged: (double newValue) {  
-                              setState(() {  
-                                _value = newValue.round();  
-                                });  
-                              },  
-                              semanticFormatterCallback: (double newValue) {  
-                                return '${newValue.round()} dollars';  
-                              }  
-                            )  
-                      ),  
-                    ]  
-                )  
-            ),  
-          )  
-      );  
-  }  
-}  
+}
