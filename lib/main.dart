@@ -1,56 +1,64 @@
 import 'package:flutter/material.dart';  
   
-void main() {  
-  runApp(MaterialApp( home: MyHomePage(),));  
-}  
+void main() => runApp(MyApp());  
   
-class MyHomePage extends StatefulWidget {  
-  @override  
-  _HomePageState createState() => _HomePageState();  
-}  
-  
-class _HomePageState extends State<MyHomePage> {  
-  bool valuefirst = false;  
-  bool valuesecond = false;  
-  
+// This Widget is the main application widget.  
+class MyApp extends StatelessWidget {  
   @override  
   Widget build(BuildContext context) {  
     return MaterialApp(  
-      home: Scaffold(  
-        appBar: AppBar(title: Text('Flutter Checkbox '),),  
-        body: Container(  
-            padding: new EdgeInsets.all(22.0),  
-            child: Column(  
-              children: <Widget>[  
-                SizedBox(width: 10,),  
-                Text('Hoạt động hằng ngày',style: TextStyle(fontSize: 20.0), ),  
-                CheckboxListTile(  
-                  secondary: const Icon(Icons.alarm),  
-                  title: const Text('Dậy vào lúc 5h sáng'),  
-                  subtitle: Text('Báo thức lúc 5h sáng'),  
-                  value: this.valuefirst,  
-                  onChanged: (bool ? value) {  
-                    setState(() {  
-                      this.valuefirst = value!;  
-                    });  
-                  },  
-                ),  
-                CheckboxListTile(  
-                  controlAffinity: ListTileControlAffinity.trailing,  
-                  secondary: const Icon(Icons.alarm),  
-                  title: const Text('Ăn sáng vào lúc 6h sáng'),  
-                  subtitle: Text('Báo thức lúc 6h sáng'),  
-                  value: this.valuesecond,  
-                  onChanged: (bool ? value) {  
-                    setState(() {  
-                      this.valuesecond = value!;  
-                    });  
-                  },  
-                ),  
-              ],  
-            )  
-        ),  
-      ),  
+      home: MySliderApp(),  
     );  
   }  
-}
+}  
+  
+class MySliderApp extends StatefulWidget {  
+  MySliderApp({Key ? key}) : super(key: key);  
+  
+  @override  
+  _MySliderAppState createState() => _MySliderAppState();  
+}  
+  
+class _MySliderAppState extends State<MySliderApp> {  
+  int _value = 6;  
+  @override  
+  Widget build(BuildContext context) {  
+    return Scaffold(  
+      appBar: AppBar(  
+        title: Text('Flutter Slider Demo'),  
+        ),  
+        body: Padding(  
+          padding: EdgeInsets.all(15.0),  
+            child: Center(  
+                child: Row(  
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,  
+                    mainAxisSize: MainAxisSize.max,  
+                    children: [  
+                      Icon(  
+                        Icons.volume_up,  
+                        size: 40,  
+                      ),  
+                      new Expanded(  
+                          child: Slider(  
+                            value: _value.toDouble(),  
+                            min: 1.0,  
+                            max: 20.0,  
+                            divisions: 10,  
+                            activeColor: Colors.green,  
+                            inactiveColor: Colors.orange,  
+                            label: 'Set volume value',  
+                            onChanged: (double newValue) {  
+                              setState(() {  
+                                _value = newValue.round();  
+                                });  
+                              },  
+                              
+                            )  
+                      ),  
+                    ]  
+                )  
+            ),  
+          )  
+      );  
+  }  
+}  
