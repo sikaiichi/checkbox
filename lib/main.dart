@@ -1,64 +1,83 @@
+import 'dart:async';  
 import 'package:flutter/material.dart';  
   
 void main() => runApp(MyApp());  
   
-// This Widget is the main application widget.  
 class MyApp extends StatelessWidget {  
   @override  
   Widget build(BuildContext context) {  
     return MaterialApp(  
-      home: MySliderApp(),  
+      home: LinearProgressIndicatorApp(),  
     );  
   }  
 }  
   
-class MySliderApp extends StatefulWidget {  
-  MySliderApp({Key ? key}) : super(key: key);  
-  
+class LinearProgressIndicatorApp extends StatefulWidget {  
   @override  
-  _MySliderAppState createState() => _MySliderAppState();  
+  State<StatefulWidget> createState() {  
+    return LinearProgressIndicatorAppState();  
+  }  
 }  
   
-class _MySliderAppState extends State<MySliderApp> {  
-  int _value = 6;  
+class LinearProgressIndicatorAppState extends State<LinearProgressIndicatorApp> {  
+  late bool _loading;  
+  late double _progressValue;  
+  
+  @override  
+  void initState() {  
+    super.initState();  
+    _loading = false;  
+    _progressValue = 0.0;  
+  }  
   @override  
   Widget build(BuildContext context) {  
     return Scaffold(  
       appBar: AppBar(  
-        title: Text('Flutter Slider Demo'),  
-        ),  
-        body: Padding(  
-          padding: EdgeInsets.all(15.0),  
-            child: Center(  
-                child: Row(  
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,  
-                    mainAxisSize: MainAxisSize.max,  
-                    children: [  
-                      Icon(  
-                        Icons.volume_up,  
-                        size: 40,  
-                      ),  
-                      new Expanded(  
-                          child: Slider(  
-                            value: _value.toDouble(),  
-                            min: 1.0,  
-                            max: 20.0,  
-                            divisions: 10,  
-                            activeColor: Colors.green,  
-                            inactiveColor: Colors.orange,  
-                            label: 'Set volume value',  
-                            onChanged: (double newValue) {  
-                              setState(() {  
-                                _value = newValue.round();  
-                                });  
-                              },  
-                              
-                            )  
-                      ),  
-                    ]  
-                )  
-            ),  
+        title: Text("Flutter Linear Progress Bar"),  
+      ),  
+      body: Center(  
+        child: Container(  
+          padding: EdgeInsets.all(12.0),  
+          child: _loading  
+              ? Column(  
+            mainAxisAlignment: MainAxisAlignment.center,  
+            children: <Widget>[  
+              LinearProgressIndicator(  
+                backgroundColor: Colors.cyanAccent,  
+                valueColor: new AlwaysStoppedAnimation<Color>(Colors.red),  
+                value: _progressValue,  
+              ),  
+              Text('${(_progressValue * 100).round()}%'),  
+            ],  
           )  
-      );  
+              : Text("Press button for downloading", style: TextStyle(fontSize: 25)),  
+        ),  
+      ),  
+      floatingActionButton: FloatingActionButton(  
+        onPressed: () {  
+          setState(() {  
+            _loading = !_loading;  
+            _updateProgress();  
+          });  
+        },  
+        tooltip: 'Download',  
+        child: Icon(Icons.cloud_download),  
+      ),  
+    );  
   }  
-}  
+  // this function updates the progress value  
+  void _updateProgress() {  
+    const oneSec = const Duration(seconds: 1);  
+    new Timer.periodic(oneSec, (Timer t) {  
+      setState(() {  
+        _progressValue += 0.1;  
+        // we "finish" downloading here  
+        if (_progressValue.toStringAsFixed(1) == '1.0') {  
+          _loading = false;  
+          t.cancel();  
+          return;  
+        }  
+      });  
+    });  
+  }  
+}
